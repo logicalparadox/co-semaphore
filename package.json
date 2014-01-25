@@ -1,0 +1,30 @@
+{
+  "name": "co-semaphore",
+  "version": "0.1.0",
+  "description": "Semaphore primitive for generator flow-control.",
+  "author": "Jake Luer <jake@alogicalparadox.com> (http://alogicalparadox.com)",
+  "license": "MIT",
+  "keywords": [
+    "semaphore",
+    "co"
+  ],
+  "homepage": "https://github.com/logicalparadox/co-future",
+  "main": "index.js",
+  "bugs": {
+    "url": "https://github.com/logicalparadox/co-future/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:logicalparadox/co-future.git"
+  },
+  "scripts": {
+    "test": "node_modules/goodwin/bin/goodwin --harmony"
+  },
+  "dependencies": {
+    "co-future": "~0.1.1"
+  },
+  "devDependencies": {
+    "goodwin": "git://github.com/logicalparadox/goodwin",
+    "co": "~3.0.2"
+  }
+}
