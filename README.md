@@ -1,8 +1,8 @@
-# co-future 
+# co-semaphore
 
-[![Build Status](https://travis-ci.org/logicalparadox/co-future.png?branch=master)](https://travis-ci.org/logicalparadox/co-future)
+[![Build Status](https://travis-ci.org/logicalparadox/co-semaphore.png?branch=master)](https://travis-ci.org/logicalparadox/co-semaphore)
 
-> Wrap a generator function in a future for fine-grained resolution control.
+> Count [semaphore](http://en.wikipedia.org/wiki/Semaphore_(programming)) primitive for generator flow-control.
 
 ## Installation
 
@@ -15,96 +15,114 @@
 ## Example
 
 ```js
-var co = require('co');
-var future = require('co-future');
+"use strict";
 
-function *blk() {
-  yield wait(100); // async stuff
-  return { hello: 'universe' };
+var co = require('co');
+var Semaphore = require('co-semaphore').Semaphore;
+
+function rand() {
+  return Math.floor(Math.random() * 10) * 100;
+}
+
+function *read(i, lock) {
+  yield lock.acquire();
+  console.log('start:', i);
+  yield wait(rand());
+  lock.release();
+  console.log('end:', i);
+  return i * 10;
 }
 
 co(function *main() {
-  var fut = future(blk);          // start calc
+  var lock = new Semaphore(3);
+  var res = [];
 
-  yield wait(50);                 // do other things
-  yield fut.wait();               // wait for resolution
-
-  if (fut.err) {                  // check for error
-    var msg = fut.err.message;
-    console.error('error:', msg); 
+  for (let i = 1; i < 11; i++) {
+    res.push(read(i, lock));
   }
 
-  console.log(fut.unwrap());      // unwrap val or throw error
+  console.log('res', yield res);
 })();
 ```
 
 ## Usage
 
-Future implementation for generator functions. Wraps
-and invokes generator using `co` on construction.
-Will not throw error of resolved future until `.unwrap()`
-so can be used as generator try/catch replacement.
+A low-level counted semaphore lock.
+
+* **@param** _{Number}_ workers 
+
+### .length
+
+Get length of waiting queue.
+
+* **@return** _{Number}_  length
+
+### .acquired
+
+Get the current number of workers; threads which
+have acquired the lock but not yet released it.
+
+* **@return** _{Number}_  acquisitions
+
+### .available
+
+Get the current number of unassigned workers;
+count of threads which can immediately acquire
+access without being put in the waiting queue.
+
+* **@return** _{Number}_  available
+
+### .count
+
+Get count of semaphore state.
+
+* **@return** _{Number}_  count
+
+### .acquire()
+
+Acquire permission to access shared resources.
+
+```js
+yield sem.acquire();
+```
+
+### .release()
+
+Notify release of access to shared resources
+to a single waiting `.acquire()`.
+
+* **@return** _{Boolean}_  release signalled acquire
+
+```js
+var hadListener = sem.release();
+```
+
+### .flush()
+
+Notify release of access to shared resources
+to all waiting `.acquire()`s.
+
+* **@return** _{Boolean}_  release signalled acquire
+
+```js
+var hadListeners = sem.flush();
+```
+
+### .lock()
+
+Acquire access to shared resources with closure. Access will
+be acquired prior to invoking the closure and unlocked as the 
+closure unwinds.
 
 * **@param** _{Generator}_ closure 
-* **@param** _{Array}_ argv 
-* **@param** _{Mixed}_ context for closure
 
 ```js
-var future = require('co-future');
+var res = yield sem.lock(function*() {
+  // do async work with lock owned
+  yield wait(100);
+  return { hello: 'universe' };
+});
 
-function*() {
-  var res = yield future(do.something()).wait();
-  return res.unwrap();
-}
-```
-
-### .err
-
-Get error or `false` of resolved future. Unlike
-`.unwrap()`, will not throw.
-
-* **@return** _{Mixed}_  error or `false`
-
-```js
-if (fut.err) console.error(fut.err.message);
-```
-
-### .res
-
-Get result or `undefined` of resolved future.
-
-* **@return** _{Boolean}_  resolved
-
-```js
-if (!fut.err) console.log(fut.res);
-```
-
-### .wait()
-
-Wait for future to resolve. On resolution will
-yield the future for further chaining. Use `.unwrap()`
-to get actual value.
-
-```js
-// wait immediately on new future
-var fut = yield future(do.something(req)).wait();
-
-// wait for existing future
-yield fut.wait();
-```
-
-
-### .unwrap()
-
-Unwrap the value stored in the future after
-resolution. If the future is currently storing
-an error it will be thrown.
-
-* **@return** _{Mixed}_  success result
-
-```js
-return res.unwrap();
-````
 
 
 ## License
