@@ -2,15 +2,15 @@
 
 [![Build Status](https://travis-ci.org/logicalparadox/co-semaphore.png?branch=master)](https://travis-ci.org/logicalparadox/co-semaphore)
 
-> Count [semaphore](http://en.wikipedia.org/wiki/Semaphore_(programming)) primitive for generator flow-control.
+> Count [semaphore](http://en.wikipedia.org/wiki/Semaphore_(programming) primitive for generator flow-control.
 
 ## Installation
 
 #### Node.js
 
-`co-future` is available through [npm](http://npmjs.org):
+`co-semaphore` is available through [npm](http://npmjs.org):
 
-    npm install co-future
+    npm install co-semaphore
 
 ## Example
 
@@ -122,7 +122,7 @@ var res = yield sem.lock(function*() {
   yield wait(100);
   return { hello: 'universe' };
 });
-
+```
 
 
 ## License
