@@ -8,14 +8,14 @@
     "semaphore",
     "co"
   ],
-  "homepage": "https://github.com/logicalparadox/co-future",
+  "homepage": "https://github.com/logicalparadox/co-semaphore",
   "main": "index.js",
   "bugs": {
-    "url": "https://github.com/logicalparadox/co-future/issues"
+    "url": "https://github.com/logicalparadox/co-semaphore/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:logicalparadox/co-future.git"
+    "url": "git@github.com:logicalparadox/co-semaphore.git"
   },
   "scripts": {
     "test": "node_modules/goodwin/bin/goodwin --harmony"
