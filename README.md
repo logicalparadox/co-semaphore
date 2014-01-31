@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/logicalparadox/co-semaphore.png?branch=master)](https://travis-ci.org/logicalparadox/co-semaphore)
 
-> Count [semaphore](http://en.wikipedia.org/wiki/Semaphore_(programming) primitive for generator flow-control.
+> Count [semaphore](http://en.wikipedia.org/wiki/Semaphore_(programming)#Semantics_and_implementation) primitive for generator flow-control.
 
 ## Installation
 
